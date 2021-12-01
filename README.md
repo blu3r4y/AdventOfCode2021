@@ -8,7 +8,7 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 
 | Day | Puzzle | Solution |
 | --: | :----- | :------- |
-| 1 | **[Day 1](https://adventofcode.com/2021/day/1)** | ~ |
+| 1 | **[Sonar Sweep](https://adventofcode.com/2021/day/1)** | :snake: [day1.py](src/day1.py) |
 
 ## Requirements
 
