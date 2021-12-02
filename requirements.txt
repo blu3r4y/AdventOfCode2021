@@ -8,6 +8,7 @@ matplotlib>=3.4
 networkx>=2.6
 numpy>=1.21
 parse>=1.19
+pre-commit>=2.16
 pyrecord>=1
 scipy>=1.7
 sympy>=1.9

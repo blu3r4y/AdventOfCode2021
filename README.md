@@ -20,3 +20,9 @@ Package requirements are specified in the [requirements.txt](requirements.txt) f
 ```
 pip install -r requirements.txt
 ```
+
+You should install the pre-commit hooks that format the code before commit
+
+```
+pre-commit install
+```
