@@ -14,7 +14,7 @@ def part1(data):
 
 @print_calls
 def part2(data):
-    window = np.convolve(data, np.ones(3, dtype=int), 'valid')
+    window = np.convolve(data, np.ones(3, dtype=int), "valid")
     return np.sum(np.diff(window) > 0)
 
 
