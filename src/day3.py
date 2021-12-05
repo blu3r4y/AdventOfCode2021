@@ -4,9 +4,8 @@
 from functools import partial
 
 import numpy as np
-
 from aocd.models import Puzzle
-from funcy import remove, print_calls
+from funcy import print_calls, remove
 
 
 @print_calls

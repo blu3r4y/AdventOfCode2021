@@ -2,10 +2,9 @@
 # (c) blu3r4y
 
 from aocd.models import Puzzle
-from funcy import print_calls
-
-from parse import parse
 from dotmap import DotMap
+from funcy import print_calls
+from parse import parse
 
 
 @print_calls

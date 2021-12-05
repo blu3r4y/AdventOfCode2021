@@ -3,9 +3,8 @@
 
 import numpy as np
 import numpy.ma as ma
-
 from aocd.models import Puzzle
-from funcy import print_calls, lmap
+from funcy import lmap, print_calls
 
 BOARD_SHAPE = 5
 

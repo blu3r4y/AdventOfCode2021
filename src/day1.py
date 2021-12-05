@@ -1,10 +1,9 @@
 # Advent of Code 2021, Day 1
 # (c) blu3r4y
 
+import numpy as np
 from aocd.models import Puzzle
 from funcy import print_calls
-
-import numpy as np
 
 
 @print_calls

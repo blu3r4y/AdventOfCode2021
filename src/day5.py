@@ -4,9 +4,9 @@
 from collections import defaultdict
 
 from aocd.models import Puzzle
+from dotmap import DotMap
 from funcy import print_calls
 from parse import parse
-from dotmap import DotMap
 
 
 @print_calls
