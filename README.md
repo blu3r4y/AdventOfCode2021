@@ -13,6 +13,7 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 | 3 | **[Binary Diagnostic](https://adventofcode.com/2021/day/3)** | :snake: [day3.py](src/day3.py) |
 | 4 | **[Giant Squid](https://adventofcode.com/2021/day/4)** | :snake: [day4.py](src/day4.py) |
 | 5 | **[Hydrothermal Venture](https://adventofcode.com/2021/day/5)** | :snake: [day5.py](src/day5.py) |
+| 6 | **[Lanternfish](https://adventofcode.com/2021/day/6)** | :snake: [day6.py](src/day6.py) |
 
 ## Requirements
 
