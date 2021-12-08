@@ -15,6 +15,7 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 | 5 | **[Hydrothermal Venture](https://adventofcode.com/2021/day/5)** | :snake: [day5.py](src/day5.py) |
 | 6 | **[Lanternfish](https://adventofcode.com/2021/day/6)** | :snake: [day6.py](src/day6.py) |
 | 7 | **[The Treachery of Whales](https://adventofcode.com/2021/day/7)** | :snake: [day7.py](src/day7.py) |
+| 8 | **[Seven Segment Search](https://adventofcode.com/2021/day/8)** | :snake: [day8.py](src/day8.py) |
 
 ## Requirements
 
@@ -22,12 +23,12 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 
 Package requirements are specified in the [requirements.txt](requirements.txt) file.
 
-```
+```sh
 pip install -r requirements.txt
 ```
 
 You should install the pre-commit hooks that format the code before commit
 
-```
+```sh
 pre-commit install
 ```
