@@ -17,6 +17,7 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 | 7 | **[The Treachery of Whales](https://adventofcode.com/2021/day/7)** | :snake: [day7.py](src/day7.py) |
 | 8 | **[Seven Segment Search](https://adventofcode.com/2021/day/8)** | :snake: [day8.py](src/day8.py) |
 | 9 | **[Smoke Basin](https://adventofcode.com/2021/day/9)** | :snake: [day9.py](src/day9.py) |
+| 10 | **[Syntax Scoring](https://adventofcode.com/2021/day/10)** | :snake: [day10.py](src/day10.py) |
 
 ## Requirements
 
