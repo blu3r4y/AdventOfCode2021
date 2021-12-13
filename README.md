@@ -20,6 +20,7 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 | 10 | **[Syntax Scoring](https://adventofcode.com/2021/day/10)** | :snake: [day10.py](src/day10.py) |
 | 11 | **[Dumbo Octopus](https://adventofcode.com/2021/day/11)** | :snake: [day11.py](src/day11.py) |
 | 12 | **[Passage Pathing](https://adventofcode.com/2021/day/12)** | :snake: [day12.py](src/day12.py) |
+| 13 | **[Transparent Origami](https://adventofcode.com/2021/day/13)** | :snake: [day13.py](src/day13.py) |
 
 ## Requirements
 
