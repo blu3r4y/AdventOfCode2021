@@ -23,6 +23,7 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 | 13 | **[Transparent Origami](https://adventofcode.com/2021/day/13)** | :snake: [day13.py](src/day13.py) |
 | 14 | **[Extended Polymerization](https://adventofcode.com/2021/day/14)** | :snake: [day14.py](src/day14.py) |
 | 15 | **[Chiton](https://adventofcode.com/2021/day/15)** | :snake: [day15.py](src/day15.py) |
+| 16 | **[Packet Decoder](https://adventofcode.com/2021/day/16)** | :snake: [day16.py](src/day16.py) |
 
 ## Requirements
 
