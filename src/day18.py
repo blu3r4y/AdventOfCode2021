@@ -11,6 +11,8 @@ from aocd.models import Puzzle
 from funcy import lmap, print_calls, with_next, with_prev
 from tqdm.auto import tqdm
 
+DEBUG_MODE = False
+
 
 @print_calls
 def part1(snails):
@@ -73,6 +75,8 @@ class SnailNode(NodeMixin):
                 break
 
     def explode(self):
+        _debug_self = str(self)
+
         assert self.depth == 4
         assert self.is_leaf_pair
         left, right = self.children
@@ -89,7 +93,11 @@ class SnailNode(NodeMixin):
         self.num = 0
         self.children = []
 
+        debug("after explode", self.root, "@", _debug_self)
+
     def split(self):
+        _debug_self = str(self)
+
         assert self.is_leaf
 
         # transform to up- and down-rounded nodes
@@ -99,6 +107,8 @@ class SnailNode(NodeMixin):
         # replace this with a pair
         self.num = None
         self.children = [a, b]
+
+        debug("after split", self.root, "@", _debug_self)
 
     def closest_left(self):
         return self.closest_sibling(with_prev)
@@ -133,6 +143,9 @@ class SnailNode(NodeMixin):
         return 3 * left.magnitude + 2 * right.magnitude
 
     def __add__(self, other):
+        debug()
+        debug("add:", self, "+", other)
+
         root = SnailNode(children=[self, other])
         root.reduce()
         return root
@@ -164,6 +177,11 @@ def load_line(line):
             return SnailNode(val)
 
     return _transform(val)
+
+
+def debug(*args):
+    if DEBUG_MODE:
+        print(*args)
 
 
 if __name__ == "__main__":
