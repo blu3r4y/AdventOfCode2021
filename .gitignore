@@ -5,7 +5,7 @@
 
 # templates
 src/day.py
-src/scratchpad.ipynb
+src/scratchpad*.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

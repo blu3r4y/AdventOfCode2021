@@ -25,6 +25,7 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 | 15 | **[Chiton](https://adventofcode.com/2021/day/15)** | :snake: [day15.py](src/day15.py) |
 | 16 | **[Packet Decoder](https://adventofcode.com/2021/day/16)** | :snake: [day16.py](src/day16.py) |
 | 17 | **[Trick Shot](https://adventofcode.com/2021/day/17)** | :snake: [day17.py](src/day17.py) |
+| 18 | **[Snailfish](https://adventofcode.com/2021/day/18)** | :snake: [day18.py](src/day18.py) |
 
 ## Requirements
 
