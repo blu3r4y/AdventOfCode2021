@@ -26,7 +26,7 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 | 16 | **[Packet Decoder](https://adventofcode.com/2021/day/16)** | :snake: [day16.py](src/day16.py) |
 | 17 | **[Trick Shot](https://adventofcode.com/2021/day/17)** | :snake: [day17.py](src/day17.py) |
 | 18 | **[Snailfish](https://adventofcode.com/2021/day/18)** | :snake: [day18.py](src/day18.py) |
-| 19 | **[Beacon Scanner](https://adventofcode.com/2021/day/19)** | - |
+| 19 | **[Beacon Scanner](https://adventofcode.com/2021/day/19)** | :snake: [day19.py](src/day19.py) |
 | 20 | **[Trench Map](https://adventofcode.com/2021/day/20)** | :snake: [day20.py](src/day20.py) |
 
 ## Requirements
