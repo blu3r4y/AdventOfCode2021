@@ -28,7 +28,7 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 | 18 | **[Snailfish](https://adventofcode.com/2021/day/18)** | :snake: [day18.py](src/day18.py) |
 | 19 | **[Beacon Scanner](https://adventofcode.com/2021/day/19)** | :snake: [day19.py](src/day19.py) |
 | 20 | **[Trench Map](https://adventofcode.com/2021/day/20)** | :snake: [day20.py](src/day20.py) |
-| 21 | **[Dirac Dice](https://adventofcode.com/2021/day/21)** | - |
+| 21 | **[Dirac Dice](https://adventofcode.com/2021/day/21)** | :snake: [day21.py](src/day21.py) |
 | 22 | **[Reactor Reboot](https://adventofcode.com/2021/day/22)** | :snake: [day22.py](src/day22.py) |
 | 23 | **[Amphipod](https://adventofcode.com/2021/day/23)** | - |
 | 24 | **[Arithmetic Logic Unit](https://adventofcode.com/2021/day/24)** | :snake: [day24.py](src/day24.py) |
