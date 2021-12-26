@@ -39,6 +39,9 @@ def part2(snails):
     return largest
 
 
+###########################################################################
+
+
 class SnailNode(NodeMixin):
     def __init__(self, num=None, parent=None, children=None):
         self.num = num
@@ -158,6 +161,9 @@ class SnailNode(NodeMixin):
     def render(self):
         # render tree for debugging
         print(RenderTree(self))
+
+
+###########################################################################
 
 
 def load(data):

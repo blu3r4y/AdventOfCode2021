@@ -19,6 +19,39 @@ ILLEGAL_STOPS = (2, 4, 6, 8)
 TROOM, THALLWAY = 0, 1
 
 
+@print_calls
+def part1(state, debug=False):
+    return solve(state, debug)
+
+
+@print_calls
+def part2(state, debug=False):
+    # mutate state to include two new room levels
+    ro = list(state.rooms)
+    ro[0] = (ro[0][0], "D", "D", ro[0][1])
+    ro[1] = (ro[1][0], "B", "C", ro[1][1])
+    ro[2] = (ro[2][0], "A", "B", ro[2][1])
+    ro[3] = (ro[3][0], "C", "A", ro[3][1])
+    newstate = State(ro, state.hallway, roomdepth=4)
+
+    return solve(newstate, debug)
+
+
+def solve(state, debug=False):
+    (total_cost, goal), parents = astar_search(state)
+    assert goal is not None, "could not find goal state"
+
+    if debug:
+        # show the full path in debug mode
+        for s in reconstruct_path(parents, start=state, goal=goal):
+            print(s, end="\n\n")
+
+    return total_cost
+
+
+###########################################################################
+
+
 class State:
     def __init__(self, rooms, hallway=None, roomdepth=2):
         self.rooms = tuple(rooms)
@@ -319,34 +352,7 @@ class State:
                         yield self.move_to_hallway(r, h)
 
 
-@print_calls
-def part1(state, debug=False):
-    return solve(state, debug)
-
-
-@print_calls
-def part2(state, debug=False):
-    # mutate state to include two new room levels
-    ro = list(state.rooms)
-    ro[0] = (ro[0][0], "D", "D", ro[0][1])
-    ro[1] = (ro[1][0], "B", "C", ro[1][1])
-    ro[2] = (ro[2][0], "A", "B", ro[2][1])
-    ro[3] = (ro[3][0], "C", "A", ro[3][1])
-    newstate = State(ro, state.hallway, roomdepth=4)
-
-    return solve(newstate, debug)
-
-
-def solve(state, debug=False):
-    (total_cost, goal), parents = astar_search(state)
-    assert goal is not None, "could not find goal state"
-
-    if debug:
-        # show the full path in debug mode
-        for s in reconstruct_path(parents, start=state, goal=goal):
-            print(s, end="\n\n")
-
-    return total_cost
+###########################################################################
 
 
 def astar_search(start):

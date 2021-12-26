@@ -49,6 +49,9 @@ def autocomplete_score(postfix):
     return score
 
 
+###########################################################################
+
+
 class Parser:
     def __init__(self, chunk, debug=False):
         self.chunk = chunk
@@ -107,6 +110,9 @@ class Parser:
     def _debug(self, line):
         if self.debug:
             print(line)
+
+
+###########################################################################
 
 
 def load(data):

@@ -79,8 +79,6 @@ if __name__ == "__main__":
     puzzle = Puzzle(year=2021, day=9)
 
     ans1 = part1(load(puzzle.input_data))
-    assert ans1 == 633
     # puzzle.answer_a = ans1
     ans2 = part2(load(puzzle.input_data))
-    assert ans2 == 1050192
     # puzzle.answer_b = ans2

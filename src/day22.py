@@ -47,6 +47,9 @@ def part2(steps, plot=False):
     return cubeset.volume()
 
 
+###########################################################################
+
+
 class CubeSet:
     def __init__(self):
         self.oncubes = set()
@@ -183,6 +186,9 @@ class CubeSet:
         fig = go.Figure(data=objects)
         fig.update_layout(showlegend=False)
         fig.show()
+
+
+###########################################################################
 
 
 def load(data):
