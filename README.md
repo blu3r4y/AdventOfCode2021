@@ -30,7 +30,7 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 | 20 | **[Trench Map](https://adventofcode.com/2021/day/20)** | :snake: [day20.py](src/day20.py) |
 | 21 | **[Dirac Dice](https://adventofcode.com/2021/day/21)** | :snake: [day21.py](src/day21.py) |
 | 22 | **[Reactor Reboot](https://adventofcode.com/2021/day/22)** | :snake: [day22.py](src/day22.py) |
-| 23 | **[Amphipod](https://adventofcode.com/2021/day/23)** | :snake: [day23.py](src/day23.py) (part 1) |
+| 23 | **[Amphipod](https://adventofcode.com/2021/day/23)** | :snake: [day23.py](src/day23.py) |
 | 24 | **[Arithmetic Logic Unit](https://adventofcode.com/2021/day/24)** | :snake: [day24.py](src/day24.py) |
 | 25 | **[Sea Cucumber](https://adventofcode.com/2021/day/25)** | :snake: [day25.py](src/day25.py) |
 

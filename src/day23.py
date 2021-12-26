@@ -15,11 +15,15 @@ NUM_ROOMS = len(AMPHIPODS)
 HALLWAY_SIZE = 11
 ILLEGAL_STOPS = (2, 4, 6, 8)
 
+# type variables for step computation
+TROOM, THALLWAY = 0, 1
+
 
 class State:
-    def __init__(self, rooms, hallway=None):
+    def __init__(self, rooms, hallway=None, roomdepth=2):
         self.rooms = tuple(rooms)
         self.hallway = tuple(hallway) if hallway else (None,) * HALLWAY_SIZE
+        self.roomdepth = roomdepth
 
     def __hash__(self):
         return hash(self.rooms) ^ hash(self.hallway)
@@ -32,16 +36,19 @@ class State:
 
     def __repr__(self):
         theuristic = self.estimate_remaining_energy()
-        tgoal = "GOAL" if self.is_goal() else f"~ {theuristic} to goal"
+        tgoal = "GOAL" if self.is_goal() else f"≥ {theuristic} to goal"
         thall = "".join([h or "." for h in self.hallway])
-        trooms0 = " ".join(r[0] if len(r) > 0 else "." for r in self.rooms)
-        trooms1 = " ".join(r[1] if len(r) > 1 else "." for r in self.rooms)
+
+        trooms = []
+        for depth in range(self.roomdepth):
+            amphs = (r[depth] if len(r) > depth else "." for r in self.rooms)
+            trooms.append(" ".join(amphs))
 
         text = []
         text.append(f"State {tgoal}")
         text.append(f"{thall}")
-        text.append(f"  {trooms1}")
-        text.append(f"  {trooms0}")
+        for troom in reversed(trooms):
+            text.append(f"  {troom}")
         return "\n".join(text)
 
     ###########################################################################
@@ -59,26 +66,27 @@ class State:
     def get_steps(self, tstart, start, tend, end, admissible=False):
         # helper to compute the full number of steps from any start to any end
         # (in admissible mode, we will underestimate the osteps and isteps)
-        assert tstart == "room" or tstart == "hallway"
-        assert tend == "room" or tend == "hallway"
-        assert not (tstart == "hallway" and tend == "hallway")
+        assert tstart == TROOM or tstart == THALLWAY
+        assert tend == TROOM or tend == THALLWAY
+        assert not (tstart == THALLWAY and tend == THALLWAY)
 
         osteps, hsteps, isteps = 0, 0, 0
         hstart, hend = None, None
+        depth = self.roomdepth + 1
 
-        if tstart == "room":
+        if tstart == TROOM:
             # steps out of start room
             assert 0 <= start <= NUM_ROOMS - 1
-            osteps = 3 - len(self.rooms[start]) if not admissible else 1
+            osteps = depth - len(self.rooms[start]) if not admissible else 1
             hstart = State.get_hallway_position(start)
         else:
             assert 0 <= start <= HALLWAY_SIZE - 1
             hstart = start
 
-        if tend == "room":
+        if tend == TROOM:
             # steps into end room
             assert 0 <= end <= NUM_ROOMS - 1
-            isteps = 3 - len(self.rooms[end]) if not admissible else 2
+            isteps = depth - len(self.rooms[end]) if not admissible else 2
             hend = State.get_hallway_position(end)
         else:
             assert 0 <= end <= HALLWAY_SIZE - 1
@@ -86,7 +94,7 @@ class State:
 
         # steps in hallway
         hsteps = abs(hend - hstart) - 1
-        if tend == "hallway":
+        if tend == THALLWAY:
             hsteps += 1
 
         return osteps + hsteps + isteps
@@ -105,12 +113,11 @@ class State:
         assert 0 <= r <= NUM_ROOMS - 1
 
         room = self.rooms[r]
-        if len(room) != 2:
+        if len(room) != self.roomdepth:
             return False
 
-        bot, top = room
         d = State.get_destination_room(room[0])
-        return bot == top and d == r
+        return all(e == room[0] for e in room) and d == r
 
     def is_hallway_free(self, start, end, skipstart=False):
         # check if the hallway path from start to end is empty
@@ -121,20 +128,19 @@ class State:
             s = s + 1 if start < end else s
             e = e - 1 if start > end else e
 
-        # print(f"hallway [{s:2d} : {e:2d}]", self.hallway[s:e])
         return all(pos is None for pos in self.hallway[s:e])
 
     def is_destination_ready(self, amph):
         # check if the destination is empty or occupied by the same amphipod
         room = self.rooms[self.get_destination_room(amph)]
-        return len(room) == 0 or (len(room) == 1 and room[0] == amph)
+        return len(room) == 0 or all(e == amph for e in room)
 
     ###########################################################################
 
     @staticmethod
     def get_energy(src, dst):
-        # compute exact cost from a to b
-        # where b is known the be a successor of a
+        # exact energy that a state transition from a to b did cost
+        # (assumes that dst is a successor of src)
         if src == dst:
             return 0
 
@@ -142,40 +148,38 @@ class State:
             if succ == dst:
                 return energy
 
+        raise ValueError("dst is not a successor of src")
+
     def estimate_remaining_energy(self):
         # admissible heuristic for the remaining total energy to the goal state
-        cost = 0
+        energy = 0
 
         for r, room in enumerate(self.rooms):
-            if len(room) == 0:
-                continue  # no amphipods in room
+            blocked = False
+            for depth, amph in enumerate(room):
+                d = self.get_destination_room(amph)
+                if d != r:
+                    # assume direct move from here to destination room
+                    blocked = True
+                    nsteps = self.get_steps(TROOM, r, TROOM, d, admissible=True)
+                    nsteps += self.roomdepth - 1 - depth  # estimate extra out steps
+                    energy += ENERGY[amph] * nsteps
 
-            # estimate for bottom amphipod in room
-            amph0, d0 = room[0], self.get_destination_room(room[0])
-            if d0 != r:
-                nsteps = self.get_steps("room", r, "room", d0, admissible=True)
-                cost += ENERGY[amph0] * nsteps
-
-            if len(room) == 1:
-                continue  # only one amphipod in room
-
-            # estimate for top amphipod in room
-            amph1, d1 = room[1], self.get_destination_room(room[1])
-            if d1 == r and d0 != r:
-                cost += ENERGY[amph1] * 4  # make room once (2 out, 2 in)
-            elif d1 != r:
-                nsteps = self.get_steps("room", r, "room", d1, admissible=True)
-                cost += ENERGY[amph1] * nsteps
+                elif d == r and blocked:
+                    # assume that this amphipod 'steps out and in' once,
+                    # to let the blocked amphipod on the lower levels leave
+                    energy += ENERGY[amph] * (4 + 2 * (self.roomdepth - 1 - depth))
 
         for h, amph in enumerate(self.hallway):
             if amph is None:
                 continue
 
+            # assume direct move from hallway to destination room
             d = self.get_destination_room(amph)
-            nsteps = self.get_steps("hallway", h, "room", d, admissible=True)
-            cost += ENERGY[amph] * nsteps
+            nsteps = self.get_steps(THALLWAY, h, TROOM, d, admissible=True)
+            energy += ENERGY[amph] * nsteps
 
-        return cost
+        return energy
 
     ###########################################################################
 
@@ -183,10 +187,11 @@ class State:
         # can any amphipod in room r move to its destination room?
         assert 0 <= r <= NUM_ROOMS - 1
 
-        if len(self.rooms[r]) == 0:
+        room = self.rooms[r]
+        if len(room) == 0:
             return False  # empty room
 
-        amph = self.rooms[r][-1]
+        amph = room[-1]
         if not self.is_destination_ready(amph):
             return False  # destination not ready
 
@@ -202,10 +207,10 @@ class State:
         # can any amphipod in the hallway move to its destination room?
         assert 0 <= h <= HALLWAY_SIZE - 1
 
-        if self.hallway[h] is None:
+        amph = self.hallway[h]
+        if amph is None:
             return False  # no amphipod at that hallway position
 
-        amph = self.hallway[h]
         if not self.is_destination_ready(amph):
             return False  # destination not ready
 
@@ -224,16 +229,14 @@ class State:
         if h in ILLEGAL_STOPS:
             return False  # can not move here
 
-        if len(self.rooms[r]) == 0:
+        room = self.rooms[r]
+        if len(room) == 0:
             return False  # empty room
 
-        if self.is_room_done(r):
-            return False  # amphipods reached their destination
-
-        amph = self.rooms[r][-1]
+        amph = room[-1]
         d = self.get_destination_room(amph)
-        if len(self.rooms[r]) == 1 and d == r:
-            return False  # the one amphipod is already in its destination
+        if all(e == amph for e in room) and d == r:
+            return False  # what's here, is already at its destination
 
         start = State.get_hallway_position(r)
         if not self.is_hallway_free(start, h):
@@ -249,14 +252,14 @@ class State:
 
         amph = self.rooms[r][-1]
         d = self.get_destination_room(amph)
-        nsteps = self.get_steps("room", r, "room", d)
+        nsteps = self.get_steps(TROOM, r, TROOM, d)
 
         # mutate to new state
         _rooms = list(self.rooms)
         _rooms[r] = _rooms[r][:-1]
         _rooms[d] = _rooms[d] + (amph,)
         energy = ENERGY[amph] * nsteps
-        return energy, State(_rooms, self.hallway)
+        return energy, State(_rooms, self.hallway, self.roomdepth)
 
     def move_from_hallway(self, h):
         # move amphipod in the hallway at position h to its destination room
@@ -264,14 +267,14 @@ class State:
 
         amph = self.hallway[h]
         d = self.get_destination_room(amph)
-        nsteps = self.get_steps("hallway", h, "room", d)
+        nsteps = self.get_steps(THALLWAY, h, TROOM, d)
 
         # mutate to new state
         _rooms, _hallway = list(self.rooms), list(self.hallway)
         _rooms[d] = _rooms[d] + (amph,)
         _hallway[h] = None
         energy = ENERGY[amph] * nsteps
-        return energy, State(_rooms, _hallway)
+        return energy, State(_rooms, _hallway, self.roomdepth)
 
     def move_to_hallway(self, r, h):
         # move amphipod in romm r to the hallway at position h
@@ -279,14 +282,14 @@ class State:
         assert 0 <= h <= HALLWAY_SIZE - 1
 
         amph = self.rooms[r][-1]
-        nsteps = self.get_steps("room", r, "hallway", h)
+        nsteps = self.get_steps(TROOM, r, THALLWAY, h)
 
         # mutate to new state
         _rooms, _hallway = list(self.rooms), list(self.hallway)
         _rooms[r] = _rooms[r][:-1]
         _hallway[h] = amph
         energy = ENERGY[amph] * nsteps
-        return energy, State(_rooms, _hallway)
+        return energy, State(_rooms, _hallway, self.roomdepth)
 
     ###########################################################################
 
@@ -318,13 +321,30 @@ class State:
 
 @print_calls
 def part1(state, debug=False):
+    return solve(state, debug)
+
+
+@print_calls
+def part2(state, debug=False):
+    # mutate state to include two new room levels
+    ro = list(state.rooms)
+    ro[0] = (ro[0][0], "D", "D", ro[0][1])
+    ro[1] = (ro[1][0], "B", "C", ro[1][1])
+    ro[2] = (ro[2][0], "A", "B", ro[2][1])
+    ro[3] = (ro[3][0], "C", "A", ro[3][1])
+    newstate = State(ro, state.hallway, roomdepth=4)
+
+    return solve(newstate, debug)
+
+
+def solve(state, debug=False):
     (total_cost, goal), parents = astar_search(state)
+    assert goal is not None, "could not find goal state"
 
     if debug:
         # show the full path in debug mode
         for s in reconstruct_path(parents, start=state, goal=goal):
-            print(s)
-            print()
+            print(s, end="\n\n")
 
     return total_cost
 
@@ -337,16 +357,16 @@ def astar_search(start):
 
     # remember parents for path reconstruction
     parents = {start: None}
-    total_cost, goal = None, None
+    total_energy, goal = None, None
 
     with tqdm() as pbar:
         while not openpq.empty():
-            total_cost, current = openpq.get()
+            total_energy, current = openpq.get()
             if current.is_goal():
                 goal = current
                 break
 
-            pbar.set_postfix(total_cost=total_cost, refresh=False)
+            pbar.set_postfix(total_energy=total_energy, refresh=False)
             pbar.update()
 
             for energy, succ in current.successors():
@@ -357,7 +377,7 @@ def astar_search(start):
                     estimate = new_energy + succ.estimate_remaining_energy()
                     openpq.put((estimate, succ))
 
-    return (total_cost, goal), parents
+    return (total_energy, goal), parents
 
 
 def reconstruct_path(parents, start, goal):
@@ -384,5 +404,5 @@ if __name__ == "__main__":
 
     ans1 = part1(load(puzzle.input_data), debug=True)
     # puzzle.answer_a = ans1
-    # ans2 = part2(load(puzzle.input_data))
+    ans2 = part2(load(puzzle.input_data), debug=True)
     # puzzle.answer_b = ans2
