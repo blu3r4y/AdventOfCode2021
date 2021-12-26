@@ -1,3 +1,6 @@
+# lark~=1.0.0
+# scipy~=1.7.1
+# sympy~=1.9
 advent-of-code-data~=1.1.0
 anytree~=2.8.0
 bitarray~=2.3.4
@@ -7,7 +10,6 @@ flake8
 funcy~=1.16
 ipykernel
 isort
-lark~=1.0.0
 matplotlib~=3.5.0
 networkx~=2.6.3
 numpy~=1.20.3
@@ -16,7 +18,4 @@ parse~=1.19.0
 plotly~=5.1.0
 pre-commit
 pyforever
-pyrecord~=1.0.1
-scipy~=1.7.1
-sympy~=1.9
 tqdm
