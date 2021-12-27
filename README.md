@@ -36,9 +36,10 @@ My solutions for the [AoC 2021](https://adventofcode.com/2021) challenges, writt
 
 ## Requirements
 
-### Python 3.9
+### Python 3.10
 
-Package requirements are specified in the [requirements.txt](requirements.txt) file.
+Package requirements are specified in the **[requirements.txt](requirements.txt)** file.
+All solutions have also been tested with Python 3.9 and might still run with a Python 3.8.
 
 ```sh
 pip install -r requirements.txt

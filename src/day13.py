@@ -3,9 +3,7 @@
 
 from collections import namedtuple
 
-import matplotlib.pylab as plt
 import numpy as np
-import pylab as plt
 from aocd.models import Puzzle
 from funcy import print_calls
 from parse import parse
@@ -34,8 +32,8 @@ def solve(data, first_fold=False):
             return paper.sum()
 
     # final letters
-    plt.imshow(paper.T)
-    plt.show()
+    transcode = lambda px: "█" if px == 1 else "·"
+    print("\n".join("".join(map(transcode, r)) for r in paper.T.tolist()))
 
 
 def fill(dots):

@@ -8,6 +8,7 @@ from aocd.models import Puzzle
 from dotmap import DotMap
 from funcy import concat, print_calls
 from parse import parse
+from tqdm.auto import tqdm
 
 
 @print_calls
@@ -27,7 +28,7 @@ def solve(area, min_range, max_range):
     velocities = set()
 
     # brute-force velocities
-    for vx in range(0, max_range):
+    for vx in tqdm(range(0, max_range)):
         for vy in range(min_range, max_range):
 
             # iterate over trajectory

@@ -365,7 +365,7 @@ def astar_search(start):
     parents = {start: None}
     total_energy, goal = None, None
 
-    with tqdm() as pbar:
+    with tqdm(unit="states") as pbar:
         while not openpq.empty():
             total_energy, current = openpq.get()
             if current.is_goal():

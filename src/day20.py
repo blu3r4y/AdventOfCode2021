@@ -5,6 +5,7 @@ from collections import defaultdict, namedtuple
 
 from aocd.models import Puzzle
 from funcy import first, lmap, print_calls, second
+from tqdm.auto import tqdm
 
 Input = namedtuple("Input", "image lookup")
 
@@ -21,7 +22,7 @@ def part2(data):
 
 def solve(data, steps):
     image, void = data.image, "0"
-    for _ in range(steps):
+    for _ in tqdm(range(steps)):
         image, void = enhance(image, data.lookup, void)
 
     return list(image.values()).count("1")

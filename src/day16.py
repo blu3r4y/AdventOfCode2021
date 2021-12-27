@@ -6,7 +6,6 @@ from functools import reduce
 from operator import mul
 
 from aocd.models import Puzzle
-from bitarray import bitarray
 from funcy import print_calls
 
 Packet = namedtuple("Packet", "i version type value")
@@ -58,14 +57,14 @@ def parse_literal(bits, i=0, perform_ops=True):
     debug(". [lit] type:", version)
 
     # parse literal blocks
-    value = bitarray()
+    value = ""
     while True:
         part = bits[(i + 1) : (i + 5)]
-        value.extend(part)
+        value += part
         i += 5
 
         # last block indicator (before increment consumed it)
-        if bits[i - 5] == 0:
+        if int(bits[i - 5]) == 0:
             break
 
     pkt = Packet(i, version, type_id, integer(value))
@@ -81,7 +80,7 @@ def parse_operator(bits, i=0, perform_ops=True):
     debug(". [op] type:", version)
 
     # length type id specifies mode 0 or 1
-    length_type = bits[i]
+    length_type = int(bits[i])
     debug(". [op] length type id:", length_type)
     i += 1
 
@@ -148,17 +147,17 @@ def perform_operation(type_id, pkts):
 def load(data):
     # convert hex number to bitarray
     num = bin(int(data.strip(), 16))
-    bits = bitarray(num[2:])
+    bits = num[2:]
 
     # look up how many padding bits there are
-    pad = bits.buffer_info()[3]
-    bits = bitarray("0" * pad) + bits
+    pad = (8 - len(bits)) % 8
+    bits = "0" * pad + bits
 
     return bits
 
 
 def integer(bits):
-    return int(bits.to01(), 2)
+    return int(bits, 2)
 
 
 def debug(*args):
