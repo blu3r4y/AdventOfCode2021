@@ -329,8 +329,11 @@ class State:
     def successors(self, debug=False):
         # compute all possible successor states
         # (in debug mode, only return the function signature)
+        move_to_dst_possible = False
+
         for r in range(NUM_ROOMS):
             if self.can_move_from_room(r):
+                move_to_dst_possible = True
                 if debug:
                     yield f"move_from_room({r})"
                 else:
@@ -338,10 +341,15 @@ class State:
 
         for h in range(HALLWAY_SIZE):
             if self.can_move_from_hallway(h):
+                move_to_dst_possible = True
                 if debug:
                     yield f"move_from_hallway({h})"
                 else:
                     yield self.move_from_hallway(h)
+
+        # prune suboptimal hallway moves if a destination move exists
+        if move_to_dst_possible:
+            return
 
         for r in range(NUM_ROOMS):
             for h in range(HALLWAY_SIZE):
